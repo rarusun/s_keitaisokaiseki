@@ -70,6 +70,11 @@ class Trie():
                         print(' ', sub_dictionary.prefix, candidate_for_base)
                         print(' ', self.base)
                         time.sleep(3)
+                    if(candidate_for_base in self.check.keys()):
+                        print(' ', sub_dictionary.prefix, candidate_for_base)
+                        print(' ', self.check)
+                        time.sleep(3)
+
 
                     self.base[candidate_for_base] = -self.vocab_dictionary[sub_dictionary.prefix]
                     self.check[candidate_for_base] = node
@@ -99,7 +104,7 @@ class Trie():
         while_i = 0
         slot_start = 1 
         while True:
-            if while_i % 5000 == 0:
+            if while_i % 100000 == 0:
                 print(while_i, len(self.base), slot_start)
             while_i += 1
             #node = nodes_to_be_explored.get()
@@ -118,6 +123,7 @@ class Trie():
             if(node in self.base.keys()):
                 print(node)
                 time.sleep(3)
+
             self.base[node] = candidate_for_base
             
             self.add_suffixes(candidate_for_base, sub_dictionary, node) 
@@ -139,19 +145,14 @@ class Trie():
         prefixes = list()
         for alphabet in query:
             num = self.base[present_node]
-            #if not self.base[present_node] + (ord(alphabet) - self.origin) in self.check:
             if not self.base[present_node] + self.c2id[alphabet] in self.check:
                 return prefixes
-
-            #elif self.check[self.base[present_node] + (ord(alphabet) - self.origin)] != present_node:
             elif self.check[self.base[present_node] + self.c2id[alphabet]] != present_node:
                 return prefixes
             else:
-                #now_num = (self.base[self.base[present_node] + (ord(alphabet) - self.origin)]) 
                 now_num = (self.base[self.base[present_node] + self.c2id[alphabet]]) 
                 if now_num in self.base.keys() and self.base[now_num] < 0:
                     prefixes.append(self.vocabulary[-self.base[now_num]-1])
-                #present_node = self.base[present_node] + (ord(alphabet) - self.origin)
                 present_node = self.base[present_node] + self.c2id[alphabet]
         return prefixes
 
